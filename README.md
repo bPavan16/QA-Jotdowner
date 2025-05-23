@@ -13,7 +13,7 @@ A beautiful dark-themed GUI application for creating and formatting programming 
 
 ## 📷 Screenshots
 
-[screenshots here]
+![image](https://github.com/user-attachments/assets/ec1b64d2-b09c-4659-b6a6-547b20c1f3c0)
 
 ## 🚀 Installation
 
