@@ -2,6 +2,7 @@ import os
 import tkinter as tk
 from tkinter import ttk, scrolledtext, filedialog, messagebox
 
+
 class MarkdownGeneratorApp:
     def __init__(self, root):
         self.root = root
@@ -31,7 +32,9 @@ class MarkdownGeneratorApp:
             "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
 
-        window_frame = canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        window_frame = canvas.create_window(
+            (0, 0), window=scrollable_frame, anchor="nw"
+        )
 
         canvas.configure(yscrollcommand=scrollbar.set)
 
@@ -60,13 +63,12 @@ class MarkdownGeneratorApp:
         self.create_label_entry(left_frame, "❓ Question Name", self.question_name)
 
         # Question Description
-        self.description_text = self.create_scrolled_text(left_frame, "📜 Description", height=7)
+        self.description_text = self.create_scrolled_text(
+            left_frame, "📜 Description", height=7
+        )
 
         # Input List
-        self.input_text = self.create_scrolled_text(left_frame, "📥 Input List", height=7)
-
-        # Output List
-        self.output_text = self.create_scrolled_text(left_frame, "📤 Output List", height=7)
+        self.input_text = self.create_scrolled_text(left_frame, "📥 Examples", height=7)
 
         # Code Input
         self.code_text = self.create_scrolled_text(left_frame, "💻 C++ Code", height=8)
@@ -75,17 +77,33 @@ class MarkdownGeneratorApp:
         buttons_frame = ttk.Frame(left_frame, style="TFrame")
         buttons_frame.pack(fill=tk.X, pady=(10, 5))
 
-        ttk.Button(buttons_frame, text="📌 Preview", command=self.generate_preview, style="Accent.TButton").pack(side=tk.LEFT, padx=5)
-        ttk.Button(buttons_frame, text="💾 Save", command=self.save_to_file, style="Accent.TButton").pack(side=tk.LEFT, padx=5)
-        ttk.Button(buttons_frame, text="🗑 Clear", command=self.clear_all, style="Clear.TButton").pack(side=tk.RIGHT, padx=5)
+        ttk.Button(
+            buttons_frame,
+            text="📌 Preview",
+            command=self.generate_preview,
+            style="Accent.TButton",
+        ).pack(side=tk.LEFT, padx=5)
+        ttk.Button(
+            buttons_frame,
+            text="💾 Save",
+            command=self.save_to_file,
+            style="Accent.TButton",
+        ).pack(side=tk.LEFT, padx=5)
+        ttk.Button(
+            buttons_frame, text="🗑 Clear", command=self.clear_all, style="Clear.TButton"
+        ).pack(side=tk.RIGHT, padx=5)
 
         # Status bar
         self.status_var = tk.StringVar()
-        status_bar = ttk.Label(left_frame, textvariable=self.status_var, anchor=tk.W, style="Status.TLabel")
+        status_bar = ttk.Label(
+            left_frame, textvariable=self.status_var, anchor=tk.W, style="Status.TLabel"
+        )
         status_bar.pack(fill=tk.X, pady=(5, 0))
 
         # Right frame - Preview
-        right_frame = ttk.LabelFrame(paned_window, text="📌 Preview", padding="10", style="Preview.TLabelframe")
+        right_frame = ttk.LabelFrame(
+            paned_window, text="📌 Preview", padding="10", style="Preview.TLabelframe"
+        )
         paned_window.add(right_frame, weight=1)
 
         self.preview_text = scrolledtext.ScrolledText(
@@ -114,33 +132,71 @@ class MarkdownGeneratorApp:
 
         self.style.configure("TFrame", background=dark_bg)
         self.style.configure("TLabelframe", background=dark_bg, foreground=text_color)
-        self.style.configure("TLabel", background=dark_bg, foreground=text_color, font=("Segoe UI", 10))
+        self.style.configure(
+            "TLabel", background=dark_bg, foreground=text_color, font=("Segoe UI", 10)
+        )
 
-        self.style.configure("Title.TLabel", font=("Segoe UI", 18, "bold"), foreground=accent_color, background=dark_bg)
+        self.style.configure(
+            "Title.TLabel",
+            font=("Segoe UI", 18, "bold"),
+            foreground=accent_color,
+            background=dark_bg,
+        )
 
-        self.style.configure("Status.TLabel", font=("Segoe UI", 10, "italic"), foreground="lightgray", background=dark_bg)
+        self.style.configure(
+            "Status.TLabel",
+            font=("Segoe UI", 10, "italic"),
+            foreground="lightgray",
+            background=dark_bg,
+        )
 
         self.style.configure("TButton", font=("Segoe UI", 10), padding=5)
-        self.style.configure("Accent.TButton", background=accent_color, foreground="white", font=("Segoe UI", 10, "bold"), padding=6)
+        self.style.configure(
+            "Accent.TButton",
+            background=accent_color,
+            foreground="white",
+            font=("Segoe UI", 10, "bold"),
+            padding=6,
+        )
         self.style.map("Accent.TButton", background=[("active", "#005f99")])
 
-        self.style.configure("Clear.TButton", background="#ff4d4d", foreground="white", font=("Segoe UI", 10, "bold"), padding=6)
+        self.style.configure(
+            "Clear.TButton",
+            background="#ff4d4d",
+            foreground="white",
+            font=("Segoe UI", 10, "bold"),
+            padding=6,
+        )
         self.style.map("Clear.TButton", background=[("active", "#cc0000")])
 
-        self.style.configure("Preview.TLabelframe", background=light_bg, foreground=text_color)
+        self.style.configure(
+            "Preview.TLabelframe", background=light_bg, foreground=text_color
+        )
 
     def create_label_entry(self, parent, label_text, var):
         """Creates a label and entry widget"""
-        frame = ttk.LabelFrame(parent, text=label_text, padding="10", style="TLabelframe")
+        frame = ttk.LabelFrame(
+            parent, text=label_text, padding="10", style="TLabelframe"
+        )
         frame.pack(fill=tk.X, pady=5)
         entry = ttk.Entry(frame, textvariable=var, font=("Segoe UI", 10))
         entry.pack(fill=tk.X, expand=True)
 
     def create_scrolled_text(self, parent, label_text, height=4):
         """Creates a labeled scrolled text widget"""
-        frame = ttk.LabelFrame(parent, text=label_text, padding="10", style="TLabelframe")
+        frame = ttk.LabelFrame(
+            parent, text=label_text, padding="10", style="TLabelframe"
+        )
         frame.pack(fill=tk.BOTH, expand=True, pady=5)
-        text_area = scrolledtext.ScrolledText(frame, wrap=tk.WORD, height=height, font=("Segoe UI", 10), bg="#252526", fg="white", insertbackground="white")
+        text_area = scrolledtext.ScrolledText(
+            frame,
+            wrap=tk.WORD,
+            height=height,
+            font=("Segoe UI", 10),
+            bg="#252526",
+            fg="white",
+            insertbackground="white",
+        )
         text_area.pack(fill=tk.BOTH, expand=True)
         return text_area
 
@@ -148,8 +204,7 @@ class MarkdownGeneratorApp:
         """Generate markdown content from the form inputs"""
         question_name = self.question_name.get().strip()
         question_description = self.description_text.get(1.0, tk.END).strip()
-        input_list = self.input_text.get(1.0, tk.END).strip()
-        output_list = self.output_text.get(1.0, tk.END).strip()
+        example_list = self.input_text.get(1.0, tk.END).strip()
         cpp_code = self.code_text.get(1.0, tk.END).strip()
 
         if not question_name:
@@ -162,17 +217,17 @@ class MarkdownGeneratorApp:
 ## 📝 Description
 {question_description}
 
-## 📥 Inputs
-{input_list}
-
-## 📤 Outputs
-{output_list}
+## 📥 Examples
+```plaintext
+{example_list}
+```
 
 ## 💻 Solution
 ```cpp
 {cpp_code}
 ```
 """
+
     def generate_preview(self):
         """Generate preview of the markdown content"""
         self.markdown_content = self.generate_markdown()
@@ -184,7 +239,7 @@ class MarkdownGeneratorApp:
         """Save the markdown content"""
         file_path = filedialog.asksaveasfilename(defaultextension=".md")
         if file_path:
-            with open(file_path, "w", encoding="utf-8") as file:
+            with open(file_path, "a", encoding="utf-8") as file:
                 file.write(self.markdown_content)
 
     def clear_all(self):
@@ -192,14 +247,10 @@ class MarkdownGeneratorApp:
         self.question_name.set("")
         self.description_text.delete(1.0, tk.END)
         self.input_text.delete(1.0, tk.END)
-        self.output_text.delete(1.0, tk.END)
         self.code_text.delete(1.0, tk.END)
 
-if __name__ == "__main__": 
-    root = tk.Tk() 
-    app = MarkdownGeneratorApp(root) 
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = MarkdownGeneratorApp(root)
     root.mainloop()
-    
-
-
-
